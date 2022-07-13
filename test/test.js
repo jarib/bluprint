@@ -3,6 +3,7 @@ const path = require('path');
 const { test } = require('../dist');
 const os = require('os');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 const resolvePath = (filePath) => path.join(process.cwd(), filePath);
 
@@ -31,6 +32,8 @@ const createTestBluprint = function() {
   fs.writeFileSync(path.join(tempdir, 'subdir', 'test-command-2.txt'), 'foo = {{ foo }}');
   fs.writeFileSync(path.join(tempdir, 'subdir', 'ignored.txt'), 'ignore me');
   fs.writeFileSync(path.join(tempdir, 'subdir', '.gitignore'), '# this should be ignored\nignored.*');
+
+  execSync('git init . && git add -A && git commit -am "Initial commit"', { shell: true, cwd: tempdir });
 
   return tempdir;
 };
